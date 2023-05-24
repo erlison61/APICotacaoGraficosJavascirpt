@@ -19,29 +19,44 @@ const obterCotacaoDolarReal = async() => {
 const obterHistoricoCotacoesDolar= async () =>{
     const hoje = new Date();
     const dataSeteDiasAtras = new Date();
-    dataSeteDiasAtras.setDate(dataSeteDiasAtras.getDate() - 7);
-
+    dataSeteDiasAtras.setDate(dataSeteDiasAtras.getDay() - 7);
+    
     const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.10813/dados?formato=json&dataInicial=${dataSeteDiasAtras.toISOString()}&dataFinal=${hoje.toISOString()}`;
     return await fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        const cotacoes = data.map(item => item.valor);
-        return cotacoes.slice(-7); // Retorna apenas os últimos 7 valores
-      })
-      .catch (error =>{
-        console.log('Erro ao obter o histórico de cotações do dólar:', error);
-      })
-}
-
-// Função para atualizar o gráfico com o histórico de cotações do dólar em relação ao real
-const atualizarGrafico= async ()=> {
-  const cotacoesDolar = await obterHistoricoCotacoesDolar();
-  const cotacaoDolarReal = await obterCotacaoDolarReal();
-
-  const cotacoesRealDolar = cotacoesDolar.map(valorDolar => 1 / valorDolar); // 1 real convertido para dólar
-  const cotacoesDolarReal = cotacoesDolar.map(valorDolar => valorDolar / cotacaoDolarReal); // 1 dólar convertido para real
-
-  const labels = cotacoesDolar.map((_, index) => `Dia ${index + 1}`);
+    .then(response => response.json())
+    .then(data => {
+      const cotacoes = data.map(item => item.valor);
+      return cotacoes.slice(-7); // Retorna apenas os últimos 7 valores
+    })
+    .catch (error =>{
+      console.log('Erro ao obter o histórico de cotações do dólar:', error);
+    })
+  }
+  
+  // Função para atualizar o gráfico com o histórico de cotações do dólar em relação ao real
+  const atualizarGrafico= async ()=> {
+    const cotacoesDolar = await obterHistoricoCotacoesDolar();
+    const cotacaoDolarReal = await obterCotacaoDolarReal();
+    
+    const cotacoesRealDolar = cotacoesDolar.map(valorDolar => 1 / valorDolar); // 1 real convertido para dólar
+    const cotacoesDolarReal = cotacoesDolar.map(valorDolar => valorDolar / cotacaoDolarReal); // 1 dólar convertido para real
+    
+    const hoje = new Date();
+    const dataSeteDiasAtras = new Date();
+    dataSeteDiasAtras.setDate(dataSeteDiasAtras.getDate() - 7);
+    
+    const labels = [];
+    let dataAtual = new Date(dataSeteDiasAtras);
+    
+    while (dataAtual <= hoje) {
+      if (dataAtual.getDay() !== 0 && dataAtual.getDay() !== 6) {
+        const diaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+        const label = `${diaSemana[dataAtual.getDay()]}`;
+        labels.push(label);
+      }
+      dataAtual.setDate(dataAtual.getDate() + 1);
+    }
+    
 
   const data = {
     labels: labels,
