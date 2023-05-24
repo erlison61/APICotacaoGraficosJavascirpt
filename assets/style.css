@@ -1,18 +1,56 @@
-body{
-    overflow: hidden;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    height: 100vh; /* Alterado para 100vh para ocupar a altura total da tela */
     background-color: #272727;
 }
-.case-chart{
+
+.case-chart {
     min-width: 500px;
     max-width: 400px;
-    background-color: rgba(0,0,0,.3);
+    height: 40vh; /* Alterado para 80vh para dar espaço para o conteúdo dentro da div */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, .3);
     padding: 2%;
     width: 60%;
     border-radius: 20px;
 }
 
+/* Estilos para telas menores que 541px */
+@media (max-width: 541px) {
+    .case-chart {
+        height: 100vh;
+        width: 100%;
+        
+        /* Estilos específicos para telas menores */
+    }
+}
+
+/* Estilos para telas menores que 500px */
+@media (max-width: 500px) {
+    .case-chart {
+        min-width: auto;
+        max-width: none;
+        padding: 10px;
+    }
+}
+
+/* Estilos para telas menores que 320px */
+@media (max-width: 320px) {
+    .case-chart {
+        padding: 5px;
+        border-radius: 10px;
+    }
+}

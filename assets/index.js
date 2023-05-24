@@ -34,7 +34,7 @@ const obterHistoricoCotacoesDolar= async () =>{
 }
 
 // Função para atualizar o gráfico com o histórico de cotações do dólar em relação ao real
-async function atualizarGrafico() {
+const atualizarGrafico= async ()=> {
   const cotacoesDolar = await obterHistoricoCotacoesDolar();
   const cotacaoDolarReal = await obterCotacaoDolarReal();
 
